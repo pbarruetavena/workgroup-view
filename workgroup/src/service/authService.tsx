@@ -11,7 +11,7 @@ export interface AuthResponseSuccess {
   msg: string;
 }
 
-const API_URL = 'http://localhost:8080/workapi/auth/login';
+const API_URL = (import.meta.env.VITE_API_URL as string) + '/auth/login';
 
 export const loginUser = async (credentials: LoginCredentials): Promise<UserModel | null> => {
   try {
