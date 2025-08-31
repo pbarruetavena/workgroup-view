@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { loginUser, type LoginCredentials } from "../service/authService";
 import type { UserModel } from "../models/UserModel";
+import { getLogged, isLogged, logon, logout as logoutUser } from "../service/localService";
 
 interface AuthContextType {
     user: UserModel | null;
@@ -21,6 +22,14 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    useEffect(() => {
+        const logged = isLogged();
+        if(logged) {
+            const loggedUser = getLogged();
+            setUser(loggedUser);
+        }
+    }, []);
+
     const login = async (credencials: LoginCredentials): Promise<boolean> => {
         setIsLoading(true);
         setError(null);
@@ -28,6 +37,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         try {
             const responseUser = await loginUser(credencials);
             if(!!responseUser) {
+                logon(responseUser);
                 setUser(responseUser);
                 return true;
             }
@@ -40,6 +50,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
 
     const logout = () => {
+        logoutUser();
         setUser(null);
     };
 

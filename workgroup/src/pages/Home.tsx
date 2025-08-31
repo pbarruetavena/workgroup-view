@@ -11,7 +11,7 @@ const Home = () => {
             <Link to="/register">Ir para a página de Cadastro</Link><br/>
             <div>
                 {user ? (
-                    <><p>Olá, {user?.token}</p><button onClick={logout}>Sair</button></>
+                    <><p>Olá, {user?.username}</p><button onClick={logout}>Sair</button></>
                 ) : (
                     <><Link to="/login">Ir para a página de Login</Link><br /></>
                 )}
